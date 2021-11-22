@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "556457440875",
+    "project_id": "paperstox-46f44",
+    "storage_bucket": "paperstox-46f44.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:556457440875:android:5afb276d2b451e0930632e",
+        "android_client_info": {
+          "package_name": "com.example.paperstox_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "556457440875-rl63g997754ue9k1s7ukkvinkeoiu14k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.paperstox_app",
+            "certificate_hash": "f1b9441089f066a682ec0543525dfd330a7319b8"
+          }
+        },
+        {
+          "client_id": "556457440875-9k6ukopurjkn7f8c9j5oaill32lsh9qd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4L4Jc5o4wLpNqh7JpGQM-hTffE-rjR74"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "556457440875-9k6ukopurjkn7f8c9j5oaill32lsh9qd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
