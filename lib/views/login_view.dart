@@ -3,16 +3,17 @@ import 'package:flutter/gestures.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'signup_view.dart';
 import 'messages_view.dart';
+import '../colors.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
   @override
-  State<LoginView> createState() => _LoginPage();
+  State<LoginView> createState() => _LoginView();
 }
 
-class _LoginPage extends State<LoginView> {
+class _LoginView extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     FirebaseAuth auth = FirebaseAuth.instance;
@@ -42,7 +43,7 @@ class _LoginPage extends State<LoginView> {
             height: 420,
             width: 370,
             child: Card(
-              color: const Color(0xff1e2124),
+              color: blackPrimary,
               elevation: 5,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
@@ -57,17 +58,17 @@ class _LoginPage extends State<LoginView> {
                         horizontal: 25, vertical: 16),
                     child: TextFormField(
                       style: const TextStyle(color: Colors.white),
-                      cursorColor: const Color(0xFF00b803),
+                      cursorColor: greenAccent,
                       controller: userNameController,
                       decoration: const InputDecoration(
                         fillColor: Colors.black,
                         filled: true,
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xff1e2124)),
+                          borderSide: BorderSide(color: blackPrimary),
                         ),
                         focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xFF00b803))),
-                        hintStyle: TextStyle(color: Color(0xFF808080)),
+                            borderSide: BorderSide(color: greenAccent)),
+                        hintStyle: TextStyle(color: greyHint),
                         border: OutlineInputBorder(),
                         hintText: 'Email',
                       ),
@@ -78,18 +79,18 @@ class _LoginPage extends State<LoginView> {
                         horizontal: 25, vertical: 16),
                     child: TextField(
                       style: const TextStyle(color: Colors.white),
-                      cursorColor: const Color(0xFF00b803),
+                      cursorColor: greenAccent,
                       controller: passwordController,
                       obscureText: true,
                       decoration: const InputDecoration(
                         fillColor: Colors.black,
                         filled: true,
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xff1e2124)),
+                          borderSide: BorderSide(color: blackPrimary),
                         ),
                         focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xFF00b803))),
-                        hintStyle: TextStyle(color: Color(0xFF808080)),
+                            borderSide: BorderSide(color: greenAccent)),
+                        hintStyle: TextStyle(color: greyHint),
                         border: OutlineInputBorder(),
                         hintText: 'Password',
                       ),
@@ -102,7 +103,7 @@ class _LoginPage extends State<LoginView> {
                     child: ElevatedButton(
                       child: const Text('Log In'),
                       style: ElevatedButton.styleFrom(
-                          primary: const Color(0xFF00b803),
+                          primary: greenAccent,
                           textStyle: const TextStyle(color: Colors.black)),
                       onPressed: () async {
                         if (userNameController.text == "") {
@@ -212,7 +213,7 @@ class _LoginPage extends State<LoginView> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => SignUpPage()),
+                                      builder: (context) => const SignUpView()),
                                 );
                               }),
                       ],
