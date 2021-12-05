@@ -207,9 +207,7 @@ class _SignUpView extends State<SignUpView> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => MessagesView(
-                                        userCredential
-                                            .user!.providerData[0].email!)),
+                                    builder: (context) => MessagesView()),
                               );
 
                               ScaffoldMessenger.of(context)

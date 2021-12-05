@@ -1,20 +1,20 @@
 {
   "project_info": {
-    "project_number": "556457440875",
-    "project_id": "paperstox-46f44",
-    "storage_bucket": "paperstox-46f44.appspot.com"
+    "project_number": "397111435575",
+    "project_id": "paperstox-247b0",
+    "storage_bucket": "paperstox-247b0.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:556457440875:android:5afb276d2b451e0930632e",
+        "mobilesdk_app_id": "1:397111435575:android:99be56c1fd0f4a67983ab2",
         "android_client_info": {
           "package_name": "com.example.paperstox_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "556457440875-rl63g997754ue9k1s7ukkvinkeoiu14k.apps.googleusercontent.com",
+          "client_id": "397111435575-o2dlu6ouo1kne1rg4th6cv4qs1kjrev8.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.paperstox_app",
@@ -22,20 +22,20 @@
           }
         },
         {
-          "client_id": "556457440875-9k6ukopurjkn7f8c9j5oaill32lsh9qd.apps.googleusercontent.com",
+          "client_id": "397111435575-f0phks02suhgkhqeiof0vgsm8lcfi62p.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB4L4Jc5o4wLpNqh7JpGQM-hTffE-rjR74"
+          "current_key": "AIzaSyDWe0GYRYrsYRA6tR73ZSrHjKdhM6t-mpM"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "556457440875-9k6ukopurjkn7f8c9j5oaill32lsh9qd.apps.googleusercontent.com",
+              "client_id": "397111435575-f0phks02suhgkhqeiof0vgsm8lcfi62p.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

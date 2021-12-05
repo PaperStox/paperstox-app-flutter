@@ -6,6 +6,10 @@ import 'messages_view.dart';
 import '../colors.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
+import '../store/reducer.dart';
+import '../models/user_details.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -126,9 +130,7 @@ class _LoginView extends State<LoginView> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => MessagesView(
-                                      userCredential
-                                          .user!.providerData[0].email!)),
+                                  builder: (context) => MessagesView()),
                             );
 
                             ScaffoldMessenger.of(context)
@@ -182,8 +184,7 @@ class _LoginView extends State<LoginView> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => MessagesView(result
-                                      .additionalUserInfo?.profile!['email'])),
+                                  builder: (context) => MessagesView()),
                             );
 
                             ScaffoldMessenger.of(context)
