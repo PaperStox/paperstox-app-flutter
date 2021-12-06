@@ -7,7 +7,6 @@ import 'package:paperstox_app/colors.dart';
 import '../main.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
-import '../models/stock_model.dart';
 
 class SearchView extends StatefulWidget {
   // const SearchView({Key? key}) : super(key: key);
