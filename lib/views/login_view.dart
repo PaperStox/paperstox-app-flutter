@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'signup_view.dart';
-import 'portfolio.dart';
 import 'bottom_navbar.dart';
 import '../colors.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -127,7 +126,8 @@ class _LoginView extends State<LoginView> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => Portfolio()),
+                                  builder: (context) =>
+                                      const BottomNavbarWidget()),
                             );
 
                             ScaffoldMessenger.of(context)
@@ -181,7 +181,8 @@ class _LoginView extends State<LoginView> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => BottomNavbarWidget()),
+                                  builder: (context) =>
+                                      const BottomNavbarWidget()),
                             );
 
                             ScaffoldMessenger.of(context)
