@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'messages_view.dart';
+import 'portfolio.dart';
 import '../colors.dart';
 
 class SignUpView extends StatefulWidget {
@@ -207,7 +207,7 @@ class _SignUpView extends State<SignUpView> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => MessagesView()),
+                                    builder: (context) => Portfolio()),
                               );
 
                               ScaffoldMessenger.of(context)
