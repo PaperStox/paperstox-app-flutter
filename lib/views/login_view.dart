@@ -126,8 +126,7 @@ class _LoginView extends State<LoginView> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      const BottomNavbarWidget()),
+                                  builder: (context) => BottomNavbarWidget()),
                             );
 
                             ScaffoldMessenger.of(context)
