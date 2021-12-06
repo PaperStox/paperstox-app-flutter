@@ -116,7 +116,13 @@ class _SearchView extends State<SearchView> {
                     trailing: IconButton(
                       color: greenAccent,
                       icon: const Icon(Icons.add_box_outlined),
-                      onPressed: () {},
+                      onPressed: () {
+                        users.doc(auth.currentUser!.uid.toString()).update({
+                          'watchlist': FieldValue.arrayUnion(
+                              [stockList['result'][index]]),
+                          // Add a snackbar when the stock is added to the watchlist
+                        });
+                      },
                     ),
                     onTap: () {},
                   ),

@@ -196,12 +196,12 @@ class _SignUpView extends State<SignUpView> {
                                       email: emailController.text,
                                       password: passwordController.text);
 
-                              users.add({
+                              users.doc(userCredential.user!.uid).set({
                                 'first_name': firstNameController.text,
                                 'last_name': lastNameController.text,
-                                'user_role': 'customer',
-                                'tis': DateTime.now().millisecondsSinceEpoch,
-                                'email': emailController.text
+                                'email': emailController.text,
+                                'uid': userCredential.user!.uid,
+                                'watchlist': [],
                               });
 
                               Navigator.push(

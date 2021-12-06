@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:paperstox_app/views/search_view.dart';
+import 'package:paperstox_app/views/watchlist_view.dart';
 import 'portfolio.dart';
 import 'search_view.dart';
+import 'watchlist_view.dart';
 import '../colors.dart';
 
 class BottomNavbarWidget extends StatefulWidget {
@@ -16,10 +18,7 @@ class _BottomNavbarWidget extends State<BottomNavbarWidget> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static final List<Widget> _widgetOptions = <Widget>[
-    const Text(
-      'Index 0: Watchlist',
-      style: optionStyle,
-    ),
+    WatchlistView(),
     SearchView(),
     const Portfolio(),
     const Text(
