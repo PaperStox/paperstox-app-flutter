@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'signup_view.dart';
 import 'messages_view.dart';
+import 'search_view.dart';
 import '../colors.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
@@ -130,7 +131,7 @@ class _LoginView extends State<LoginView> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => MessagesView()),
+                                  builder: (context) => SearchView()),
                             );
 
                             ScaffoldMessenger.of(context)
