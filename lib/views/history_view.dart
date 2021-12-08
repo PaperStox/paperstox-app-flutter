@@ -156,6 +156,6 @@ class _historyViewState extends State<historyView> {
                     );
                   }
                 })
-            : Text("No historical transations available."));
+            : const CircularProgressIndicator(color: Colors.white));
   }
 }
