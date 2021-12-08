@@ -118,28 +118,40 @@ class _historyViewState extends State<historyView> {
                       ),
                     );
                   } else {
-                    return Card(
-                      child: ListTile(
-                        tileColor: Colors.red,
-                        leading: Image.network(transaction_data[index]
-                                        ['stock_logo'] !=
-                                    null &&
-                                transaction_data[index]['stock_logo'] != ""
-                            ? transaction_data[index]['stock_logo']
-                            : "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Phi_fenomeni.gif/50px-Phi_fenomeni.gif"),
-                        title: Text(
-                          "${transaction_data[index]['symbol']} (${transaction_data[index]['company_name']})",
-                          style: const TextStyle(color: Colors.white),
+                    return InkWell(
+                      onTap: () {
+                        print(transaction_data[index]['symbol']);
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => StockDetails(
+                              symbol: transaction_data[index]['symbol'],
+                            ),
+                          ),
+                        );
+                      },
+                      child: Card(
+                        child: ListTile(
+                          tileColor: Colors.red,
+                          leading: Image.network(transaction_data[index]
+                                          ['stock_logo'] !=
+                                      null &&
+                                  transaction_data[index]['stock_logo'] != ""
+                              ? transaction_data[index]['stock_logo']
+                              : "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Phi_fenomeni.gif/50px-Phi_fenomeni.gif"),
+                          title: Text(
+                            "${transaction_data[index]['symbol']} (${transaction_data[index]['company_name']})",
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                          subtitle: Text(
+                            "stocks : ${transaction_data[index]['no_of_stocks']}" +
+                                " | total amount : ${transaction_data[index]['total_amount']}" +
+                                "\n"
+                                    "sold on ${format.format(transaction_data[index]['createdAt'].toDate()).toString()}",
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                          trailing: Text(""),
+                          isThreeLine: true,
                         ),
-                        subtitle: Text(
-                          "stocks : ${transaction_data[index]['no_of_stocks']}" +
-                              " | total amount : ${transaction_data[index]['total_amount']}" +
-                              "\n"
-                                  "sold on ${format.format(transaction_data[index]['createdAt'].toDate()).toString()}",
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                        trailing: Text(""),
-                        isThreeLine: true,
                       ),
                     );
                   }
