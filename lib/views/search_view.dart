@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:paperstox_app/colors.dart';
 import '../main.dart';
+import './portfolio.dart';
+import './logout.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
@@ -22,8 +24,10 @@ class _SearchView extends State<SearchView> {
   static const baseUrl = 'https://finnhub.io';
   static const apiKey = 'c6m0etaad3i9dkni2fqg';
   var stockList;
+  var watchlist;
   var res;
   var currentUser;
+  var flag = false;
   final TextEditingController searchText = TextEditingController();
 
   static const border = OutlineInputBorder(
@@ -34,20 +38,35 @@ class _SearchView extends State<SearchView> {
     http
         .get(Uri.parse('$baseUrl/api/v1/search?q=$searchString&token=$apiKey'))
         .then((res) {
-      print("Stocklist is: " + json.decode(res.body).toString());
       setState(() => stockList = json.decode(res.body));
+    });
+  }
+
+  fetchWatchlist() {
+    firestore
+        .collection("users")
+        .where("uid", isEqualTo: auth.currentUser!.uid.toString())
+        .get()
+        .then((querySnapshot) {
+      print(querySnapshot.docs[0]['watchlist'].toString());
+      setState(() => watchlist = querySnapshot.docs[0]['watchlist']);
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    if (watchlist == null) {
+      fetchWatchlist();
+    }
     CollectionReference users = firestore.collection('users');
     return Scaffold(
         appBar: AppBar(title: const Text("Search"), actions: <Widget>[
           Padding(
               padding: const EdgeInsets.only(right: 20.0),
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  showLogoutDialog(context, auth);
+                },
                 child: const Icon(
                   Icons.logout,
                   size: 25,
@@ -117,11 +136,26 @@ class _SearchView extends State<SearchView> {
                       color: greenAccent,
                       icon: const Icon(Icons.add_box_outlined),
                       onPressed: () {
-                        users.doc(auth.currentUser!.uid.toString()).update({
-                          'watchlist': FieldValue.arrayUnion(
-                              [stockList['result'][index]]),
-                          // Add a snackbar when the stock is added to the watchlist
-                        });
+                        watchlist.forEach((stock) => {
+                              if (stock['displaySymbol'] ==
+                                  stockList['result'][index]['displaySymbol'])
+                                {flag = true}
+                            });
+                        if (flag == false) {
+                          users.doc(auth.currentUser!.uid.toString()).update({
+                            'watchlist': FieldValue.arrayUnion(
+                                [stockList['result'][index]]),
+                          });
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text("Added to your watchlist"),
+                          ));
+                        } else {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text("Already added to your watchlist"),
+                          ));
+                        }
                       },
                     ),
                     onTap: () {},

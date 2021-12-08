@@ -41,6 +41,7 @@ class _WatchlistView extends State<WatchlistView> {
 
   @override
   Widget build(BuildContext context) {
+    CollectionReference users = firestore.collection('users');
     if (stockList == null) {
       fetchWatchlist();
     }
@@ -76,11 +77,18 @@ class _WatchlistView extends State<WatchlistView> {
                     subtitle: Text(stockList[index]['displaySymbol'],
                         style: const TextStyle(color: greenAccent)),
                     isThreeLine: true,
-                    // trailing: IconButton(
-                    //   color: greenAccent,
-                    //   icon: const Icon(Icons.add_box_outlined),
-                    //   onPressed: () {},
-                    // ),
+                    trailing: IconButton(
+                      color: greenAccent,
+                      icon: const Icon(Icons.remove),
+                      onPressed: () {
+                        users.doc(auth.currentUser!.uid.toString()).update({
+                          'watchlist':
+                              FieldValue.arrayRemove([stockList[index]]),
+                          // Add a snackbar when the stock is added to the watchlist
+                        });
+                        fetchWatchlist();
+                      },
+                    ),
                     onTap: () {},
                   ),
                 );
