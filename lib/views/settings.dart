@@ -3,6 +3,7 @@ import 'package:paperstox_app/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:paperstox_app/views/login_view.dart';
+import 'package:paperstox_app/views/portfolio.dart';
 
 class settingsView extends StatefulWidget {
   settingsView({Key? key}) : super(key: key);
@@ -71,7 +72,7 @@ class _settingsViewState extends State<settingsView> {
               'Current Balance: ${currentBalance != null ? currentBalance.toString() : "NA"}',
               textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 20,
                   color: Colors.white,
                   fontWeight: FontWeight.bold),
@@ -125,6 +126,24 @@ class _settingsViewState extends State<settingsView> {
                             textStyle: const TextStyle(color: Colors.black)),
                         onPressed: () {
                           // update balance of user in the database
+                          var newBalance = currentBalance +
+                              int.parse(credit_balance_controller.text);
+
+                          FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(userId)
+                              .update({
+                            'balance': newBalance,
+                          }).then((value) {
+                            print("new document is updated");
+                            credit_balance_controller.clear();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Portfolio()),
+                            );
+                          }).catchError((onError) => print(
+                                  "error occurred while creating new document"));
                         },
                       ),
                     ),
