@@ -4,6 +4,7 @@ import 'package:paperstox_app/views/watchlist_view.dart';
 import 'portfolio.dart';
 import 'search_view.dart';
 import 'watchlist_view.dart';
+import 'history_view.dart';
 import '../colors.dart';
 
 class BottomNavbarWidget extends StatefulWidget {
@@ -21,10 +22,7 @@ class _BottomNavbarWidget extends State<BottomNavbarWidget> {
     WatchlistView(),
     SearchView(),
     const Portfolio(),
-    const Text(
-      'Index 3: History',
-      style: optionStyle,
-    ),
+    historyView(),
     const Text(
       'Index 4: Settings',
       style: optionStyle,

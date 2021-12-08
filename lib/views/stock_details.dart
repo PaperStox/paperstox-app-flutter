@@ -359,13 +359,470 @@ class _StockDetailsState extends State<StockDetails> {
           ),
         ),
       ),
+      bottomNavigationBar: Row(
+        children: [
+          Expanded(
+            child: Material(
+              color: greenAccent,
+              child: InkWell(
+                onTap: () {
+                  //print('called on tap');
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text("Buy Stocks"),
+                          content: Stack(
+                            overflow: Overflow.visible,
+                            children: <Widget>[
+                              Positioned(
+                                right: -40.0,
+                                top: -80.0,
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const CircleAvatar(
+                                    child: Icon(Icons.close),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                ),
+                              ),
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
 
-      // add bottom-navigation-bar-for buy and sell
+                                    // text form field for buy stocks
+                                    child: TextFormField(
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                      cursorColor: greenAccent,
+                                      controller: no_of_stocks_controller,
+                                      onChanged: (val) {
+                                        setState(() {
+                                          total_amount = int.parse(val) *
+                                              double.parse(
+                                                  stockPriceDetails['c']
+                                                      .toString());
+                                          print(total_amount);
+                                        });
+                                      },
+                                      decoration: const InputDecoration(
+                                        fillColor: Colors.black,
+                                        filled: true,
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide:
+                                              BorderSide(color: blackPrimary),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                            borderSide:
+                                                BorderSide(color: greenAccent)),
+                                        hintStyle: TextStyle(color: greyHint),
+                                        border: OutlineInputBorder(),
+                                        hintText: 'No of stocks to buy',
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text(
+                                          stockPriceDetails['c'].toString())),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: RaisedButton(
+                                      child:
+                                          Text("Buy ${widget.symbol} stocks"),
+                                      onPressed: () {
+                                        // get the complete user data from backend
+                                        FirebaseFirestore.instance
+                                            .collection('users')
+                                            .doc(userId)
+                                            .get()
+                                            .then((DocumentSnapshot
+                                                documentSnapshot) {
+                                          if (documentSnapshot.exists) {
+                                            Map<String, dynamic> data =
+                                                documentSnapshot.data()!
+                                                    as Map<String, dynamic>;
+
+                                            // get the transactions array from the database
+                                            var transactions =
+                                                data['transactions'];
+
+                                            // get the bought_stocks map from the database
+                                            var bought_stocks =
+                                                data['bought_stocks'];
+
+                                            // update transaction array
+                                            Map<String, dynamic>
+                                                transaction_obj =
+                                                new Map<String, dynamic>();
+                                            transaction_obj['symbol'] =
+                                                widget.symbol.toString();
+
+                                            transaction_obj['company_name'] =
+                                                stockDetails['name'].toString();
+
+                                            transaction_obj['current_price'] =
+                                                stockPriceDetails['c']
+                                                    .toString();
+
+                                            transaction_obj['type'] =
+                                                stockPriceDetails['type'] =
+                                                    "buy";
+
+                                            transaction_obj['stock_logo'] =
+                                                stockDetails['logo'].toString();
+
+                                            transaction_obj['no_of_stocks'] =
+                                                no_of_stocks_controller.text;
+
+                                            transaction_obj['total_amount'] =
+                                                total_amount;
+
+                                            transaction_obj['createdAt'] =
+                                                DateTime.now();
+
+                                            transactions.add(transaction_obj);
+
+                                            // update bought_stock_map
+                                            if (bought_stocks.isEmpty ||
+                                                !bought_stocks.containsKey(
+                                                    widget.symbol)) {
+                                              bought_stocks[widget.symbol] =
+                                                  int.parse(
+                                                      no_of_stocks_controller
+                                                          .text);
+                                            } else {
+                                              var val =
+                                                  bought_stocks[widget.symbol];
+                                              bought_stocks[
+                                                  widget
+                                                      .symbol] = val +
+                                                  int.parse(
+                                                      no_of_stocks_controller
+                                                          .text);
+                                            }
+
+                                            // push the data to firebase
+                                            FirebaseFirestore.instance
+                                                .collection('users')
+                                                .doc(userId)
+                                                .update({
+                                              'transactions': transactions,
+                                              'bought_stocks': bought_stocks
+                                            }).then((value) {
+                                              print("new document is updated");
+                                              no_of_stocks_controller.clear();
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const Portfolio()),
+                                              );
+                                            }).catchError((onError) => print(
+                                                    "error occurred while creating new document"));
+                                          } else {
+                                            print(
+                                                "document does not exists in the datavbase");
+                                          }
+                                        });
+                                      },
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      });
+                },
+                child: const SizedBox(
+                  height: kToolbarHeight,
+                  width: 100,
+                  child: Center(
+                    child: ElevatedButton(
+                        onPressed: null,
+                        child: Center(
+                            child: Text("Buy",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                )))),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Material(
+              color: Colors.red,
+              child: InkWell(
+                onTap: () {
+                  //print('called on tap');
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text("Sell Stocks"),
+                          content: Stack(
+                            overflow: Overflow.visible,
+                            children: <Widget>[
+                              Positioned(
+                                right: -40.0,
+                                top: -80.0,
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const CircleAvatar(
+                                    child: Icon(Icons.close),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                ),
+                              ),
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+
+                                    // text form field for buy stocks
+                                    child: TextFormField(
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                      cursorColor: greenAccent,
+                                      controller: no_of_stocks_controller,
+                                      onChanged: (val) {
+                                        setState(() {
+                                          total_amount = int.parse(val) *
+                                              double.parse(
+                                                  stockPriceDetails['c']
+                                                      .toString());
+                                          print(total_amount);
+                                        });
+                                      },
+                                      decoration: const InputDecoration(
+                                        fillColor: Colors.black,
+                                        filled: true,
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide:
+                                              BorderSide(color: blackPrimary),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                            borderSide:
+                                                BorderSide(color: greenAccent)),
+                                        hintStyle: TextStyle(color: greyHint),
+                                        border: OutlineInputBorder(),
+                                        hintText: 'No of stocks to Sell',
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text(
+                                          stockPriceDetails['c'].toString())),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: RaisedButton(
+                                      child:
+                                          Text("Sell ${widget.symbol} stocks"),
+                                      onPressed: () {
+                                        // get the complete user data from backend
+                                        FirebaseFirestore.instance
+                                            .collection('users')
+                                            .doc(userId)
+                                            .get()
+                                            .then((DocumentSnapshot
+                                                documentSnapshot) {
+                                          if (documentSnapshot.exists) {
+                                            Map<String, dynamic> data =
+                                                documentSnapshot.data()!
+                                                    as Map<String, dynamic>;
+
+                                            // get the transactions array from the database
+                                            var transactions =
+                                                data['transactions'];
+
+                                            // get the bought_stocks map from the database
+                                            var bought_stocks =
+                                                data['bought_stocks'];
+
+                                            // check if selling_stocks <= stocks that user have
+
+                                            if (!bought_stocks.containsKey(
+                                                    widget.symbol) ||
+                                                bought_stocks[widget.symbol] <
+                                                    int.parse(
+                                                        no_of_stocks_controller
+                                                            .text)) {
+                                              showErrorDiaogForSellPage(
+                                                  context);
+                                              no_of_stocks_controller.text = "";
+                                            } else {
+                                              Map<String, dynamic>
+                                                  transaction_obj =
+                                                  new Map<String, dynamic>();
+                                              transaction_obj['symbol'] =
+                                                  widget.symbol.toString();
+
+                                              transaction_obj['company_name'] =
+                                                  stockDetails['name']
+                                                      .toString();
+
+                                              transaction_obj['current_price'] =
+                                                  stockPriceDetails['c']
+                                                      .toString();
+
+                                              transaction_obj['type'] = "sell";
+
+                                              transaction_obj['no_of_stocks'] =
+                                                  no_of_stocks_controller.text;
+
+                                              transaction_obj['total_amount'] =
+                                                  total_amount;
+
+                                              transaction_obj['createdAt'] =
+                                                  DateTime.now();
+
+                                              transactions.add(transaction_obj);
+
+                                              // update bought_stock_map
+                                              if (bought_stocks.isEmpty ||
+                                                  !bought_stocks.containsKey(
+                                                      widget.symbol)) {
+                                                showErrorDiaogForSellPage(
+                                                    context);
+                                              } else {
+                                                var val = bought_stocks[
+                                                    widget.symbol];
+                                                bought_stocks[
+                                                    widget
+                                                        .symbol] = val -
+                                                    int.parse(
+                                                        no_of_stocks_controller
+                                                            .text);
+                                              }
+
+                                              // push the data to firebase
+                                              FirebaseFirestore.instance
+                                                  .collection('users')
+                                                  .doc(userId)
+                                                  .update({
+                                                'transactions': transactions,
+                                                'bought_stocks': bought_stocks
+                                              }).then((value) {
+                                                print(
+                                                    "new document is updated");
+                                                no_of_stocks_controller.clear();
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const Portfolio()),
+                                                );
+                                              }).catchError((onError) => print(
+                                                      "error occurred while creating new document"));
+                                            }
+                                          } else {
+                                            //give an error
+                                            print(
+                                                "document does not exists in the datavbase");
+                                          }
+                                        });
+                                      },
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      });
+                },
+                child: const SizedBox(
+                  height: kToolbarHeight,
+                  width: 100,
+                  child: Center(
+                    child: ElevatedButton(
+                        onPressed: null,
+                        child: Center(
+                            child: Text("Sell",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                )))),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
-  // add error dialogue for buy page
+  void showErrorDiaogForBuyPage(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Buy ${widget.symbol} stocks"),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text('Are you sure you want to log out?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("NO"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text("YES"),
+              onPressed: () async {
+                // await auth.signOut();
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => const PaperStox()),
+                // );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
-  // add error dialogue for sell page
-
+  void showErrorDiaogForSellPage(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Error!!"),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text('You do not have enough stocks to sell.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("Ok"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
