@@ -1,8 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:paperstox_app/colors.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:paperstox_app/views/login_view.dart';
 
-class SettingsPage extends StatelessWidget {
-  const SettingsPage({Key? key}) : super(key: key);
+class settingsView extends StatefulWidget {
+  settingsView({Key? key}) : super(key: key);
+
+  @override
+  _settingsViewState createState() => _settingsViewState();
+}
+
+class _settingsViewState extends State<settingsView> {
+  var userId;
+  var currentBalance;
+
+  final password_controller = TextEditingController();
+  final credit_balance_controller = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    // get the userId
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user == null) {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const LoginView()));
+      }
+      setState(() {
+        userId = user!.uid;
+      });
+
+      print("userId is $userId");
+
+      // get all transaction data
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get()
+          .then((DocumentSnapshot documentSnapshot) {
+        if (documentSnapshot.exists) {
+          print('Document exists on the database');
+
+          setState(() {
+            currentBalance = documentSnapshot['balance'];
+          });
+
+          print(currentBalance);
+        }
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +94,11 @@ class SettingsPage extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 25, vertical: 16),
+
+                      // text field for credit balance
                       child: TextFormField(
                         style: const TextStyle(color: Colors.white),
+                        controller: credit_balance_controller,
                         cursorColor: greenAccent,
                         decoration: const InputDecoration(
                           fillColor: Colors.black,
@@ -70,12 +122,16 @@ class SettingsPage extends StatelessWidget {
                         style: ElevatedButton.styleFrom(
                             primary: greenAccent,
                             textStyle: const TextStyle(color: Colors.black)),
-                        onPressed: () {},
+                        onPressed: () {
+                          // update balance of user in the database
+                        },
                       ),
                     ),
                     const Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: 25, vertical: 16),
+
+                      // text field for password update
                       child: TextField(
                         style: TextStyle(color: Colors.white),
                         cursorColor: greenAccent,
@@ -102,7 +158,9 @@ class SettingsPage extends StatelessWidget {
                         style: ElevatedButton.styleFrom(
                             primary: greenAccent,
                             textStyle: const TextStyle(color: Colors.black)),
-                        onPressed: () {},
+                        onPressed: () {
+                          // update the password of user in the database
+                        },
                       ),
                     ),
                   ],

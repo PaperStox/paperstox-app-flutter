@@ -24,7 +24,7 @@ class _BottomNavbarWidget extends State<BottomNavbarWidget> {
     SearchView(),
     const Portfolio(),
     historyView(),
-    const SettingsPage(),
+    settingsView(),
   ];
 
   void _onItemTapped(int index) {
