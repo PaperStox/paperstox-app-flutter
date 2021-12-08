@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:paperstox_app/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:paperstox_app/views/bottom_navbar.dart';
 import 'package:paperstox_app/views/login_view.dart';
 import 'package:paperstox_app/views/portfolio.dart';
 
@@ -140,7 +141,8 @@ class _settingsViewState extends State<settingsView> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const Portfolio()),
+                                  builder: (context) =>
+                                      const BottomNavbarWidget()),
                             );
                           }).catchError((onError) => print(
                                   "error occurred while creating new document"));
