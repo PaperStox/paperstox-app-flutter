@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:paperstox_app/colors.dart';
 import '../main.dart';
+import './logout.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
@@ -41,6 +42,7 @@ class _WatchlistView extends State<WatchlistView> {
 
   @override
   Widget build(BuildContext context) {
+    CollectionReference users = firestore.collection('users');
     if (stockList == null) {
       fetchWatchlist();
     }
@@ -49,7 +51,9 @@ class _WatchlistView extends State<WatchlistView> {
           Padding(
               padding: const EdgeInsets.only(right: 20.0),
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  showLogoutDialog(context, auth);
+                },
                 child: const Icon(
                   Icons.logout,
                   size: 25,
@@ -76,11 +80,18 @@ class _WatchlistView extends State<WatchlistView> {
                     subtitle: Text(stockList[index]['displaySymbol'],
                         style: const TextStyle(color: greenAccent)),
                     isThreeLine: true,
-                    // trailing: IconButton(
-                    //   color: greenAccent,
-                    //   icon: const Icon(Icons.add_box_outlined),
-                    //   onPressed: () {},
-                    // ),
+                    trailing: IconButton(
+                      color: greenAccent,
+                      icon: const Icon(Icons.remove),
+                      onPressed: () {
+                        users.doc(auth.currentUser!.uid.toString()).update({
+                          'watchlist':
+                              FieldValue.arrayRemove([stockList[index]]),
+                          // Add a snackbar when the stock is added to the watchlist
+                        });
+                        fetchWatchlist();
+                      },
+                    ),
                     onTap: () {},
                   ),
                 );
