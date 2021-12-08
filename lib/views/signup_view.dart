@@ -204,7 +204,7 @@ class _SignUpView extends State<SignUpView> {
                                 'watchlist': [],
                                 'balance': 100,
                                 'transactions': [],
-                                'bought_stocks': {},
+                                'bought_stocks': [],
                               });
 
                               Navigator.push(

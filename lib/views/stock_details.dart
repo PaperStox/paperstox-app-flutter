@@ -452,7 +452,7 @@ class _StockDetailsState extends State<StockDetails> {
                                             var transactions =
                                                 data['transactions'];
 
-                                            // get the bought_stocks map from the database
+                                            // get the bought_stocks array from the database
                                             var bought_stocks =
                                                 data['bought_stocks'];
 
@@ -488,23 +488,53 @@ class _StockDetailsState extends State<StockDetails> {
 
                                             transactions.add(transaction_obj);
 
-                                            // update bought_stock_map
-                                            if (bought_stocks.isEmpty ||
-                                                !bought_stocks.containsKey(
-                                                    widget.symbol)) {
-                                              bought_stocks[widget.symbol] =
-                                                  int.parse(
-                                                      no_of_stocks_controller
-                                                          .text);
+                                            var flag = 0;
+                                            if (bought_stocks.length > 0) {
+                                              // check if stock is already present in it or not
+                                              for (int i = 0;
+                                                  i < bought_stocks.length;
+                                                  i++) {
+                                                var item = bought_stocks[i];
+                                                if (item['ticker'].toString() ==
+                                                    widget.symbol) {
+                                                  // stocks are already bought at some time
+                                                  flag = 1;
+                                                }
+                                              }
+                                            }
+
+                                            if (flag == 1) {
+                                              // stocks already bought
+                                              for (int i = 0;
+                                                  i < bought_stocks.length;
+                                                  i++) {
+                                                var item = bought_stocks[i];
+                                                if (item['ticker'].toString() ==
+                                                    widget.symbol) {
+                                                  // go the object update it
+                                                  var val = item['count'];
+                                                  item['count'] = val +
+                                                      int.parse(
+                                                          no_of_stocks_controller
+                                                              .text);
+                                                }
+                                              }
                                             } else {
-                                              var val =
-                                                  bought_stocks[widget.symbol];
-                                              bought_stocks[
-                                                  widget
-                                                      .symbol] = val +
+                                              // user has not bought this stocks already
+                                              Map<String, dynamic>
+                                                  bought_stock_obj =
+                                                  new Map<String, dynamic>();
+
+                                              bought_stock_obj['ticker'] =
+                                                  widget.symbol.toString();
+
+                                              bought_stock_obj['count'] =
                                                   int.parse(
                                                       no_of_stocks_controller
                                                           .text);
+
+                                              bought_stocks
+                                                  .add(bought_stock_obj);
                                             }
 
                                             // push the data to firebase
@@ -656,84 +686,116 @@ class _StockDetailsState extends State<StockDetails> {
                                                 data['bought_stocks'];
 
                                             // check if selling_stocks <= stocks that user have
+                                            var flag = 0;
+                                            // check if stock present in the database
+                                            for (int i = 0;
+                                                i < bought_stocks.length;
+                                                i++) {
+                                              var item = bought_stocks[i];
+                                              if (item['ticker'] ==
+                                                  widget.symbol) {
+                                                flag = 1;
+                                                break;
+                                              }
+                                            }
 
-                                            if (!bought_stocks.containsKey(
-                                                    widget.symbol) ||
-                                                bought_stocks[widget.symbol] <
-                                                    int.parse(
+                                            if (flag == 1) {
+                                              // stock present in the database;
+                                              // check if user has enough stocks
+                                              for (int i = 0;
+                                                  i < bought_stocks.length;
+                                                  i++) {
+                                                var item = bought_stocks[i];
+                                                if (item['ticker'] ==
+                                                    widget.symbol) {
+                                                  var val = item['count'];
+                                                  if (int.parse(
+                                                          no_of_stocks_controller
+                                                              .text) <=
+                                                      val) {
+                                                    // user can sell the stock
+                                                    Map<String, dynamic>
+                                                        transaction_obj =
+                                                        new Map<String,
+                                                            dynamic>();
+                                                    transaction_obj['symbol'] =
+                                                        widget.symbol
+                                                            .toString();
+
+                                                    transaction_obj[
+                                                            'company_name'] =
+                                                        stockDetails['name']
+                                                            .toString();
+
+                                                    transaction_obj[
+                                                            'current_price'] =
+                                                        stockPriceDetails['c']
+                                                            .toString();
+
+                                                    transaction_obj['type'] =
+                                                        "sell";
+
+                                                    transaction_obj[
+                                                            'stock_logo'] =
+                                                        stockDetails['logo']
+                                                            .toString();
+
+                                                    transaction_obj[
+                                                            'no_of_stocks'] =
                                                         no_of_stocks_controller
-                                                            .text)) {
+                                                            .text;
+
+                                                    transaction_obj[
+                                                            'total_amount'] =
+                                                        total_amount;
+
+                                                    transaction_obj[
+                                                            'createdAt'] =
+                                                        DateTime.now();
+
+                                                    transactions
+                                                        .add(transaction_obj);
+
+                                                    item['count'] = val -
+                                                        int.parse(
+                                                            no_of_stocks_controller
+                                                                .text);
+
+                                                    // push the data to firebase
+                                                    FirebaseFirestore.instance
+                                                        .collection('users')
+                                                        .doc(userId)
+                                                        .update({
+                                                      'transactions':
+                                                          transactions,
+                                                      'bought_stocks':
+                                                          bought_stocks
+                                                    }).then((value) {
+                                                      print(
+                                                          "new document is updated");
+                                                      no_of_stocks_controller
+                                                          .clear();
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                const Portfolio()),
+                                                      );
+                                                    }).catchError((onError) =>
+                                                            print(
+                                                                "error occurred while creating new document"));
+                                                  } else {
+                                                    no_of_stocks_controller
+                                                        .text = "";
+                                                    showErrorDiaogForSellPage(
+                                                        context);
+                                                  }
+                                                }
+                                              }
+                                            } else {
+                                              no_of_stocks_controller.text = "";
                                               showErrorDiaogForSellPage(
                                                   context);
-                                              no_of_stocks_controller.text = "";
-                                            } else {
-                                              Map<String, dynamic>
-                                                  transaction_obj =
-                                                  new Map<String, dynamic>();
-                                              transaction_obj['symbol'] =
-                                                  widget.symbol.toString();
-
-                                              transaction_obj['company_name'] =
-                                                  stockDetails['name']
-                                                      .toString();
-
-                                              transaction_obj['current_price'] =
-                                                  stockPriceDetails['c']
-                                                      .toString();
-
-                                              transaction_obj['type'] = "sell";
-
-                                              transaction_obj['stock_logo'] =
-                                                  stockDetails['logo']
-                                                      .toString();
-
-                                              transaction_obj['no_of_stocks'] =
-                                                  no_of_stocks_controller.text;
-
-                                              transaction_obj['total_amount'] =
-                                                  total_amount;
-
-                                              transaction_obj['createdAt'] =
-                                                  DateTime.now();
-
-                                              transactions.add(transaction_obj);
-
-                                              // update bought_stock_map
-                                              if (bought_stocks.isEmpty ||
-                                                  !bought_stocks.containsKey(
-                                                      widget.symbol)) {
-                                                showErrorDiaogForSellPage(
-                                                    context);
-                                              } else {
-                                                var val = bought_stocks[
-                                                    widget.symbol];
-                                                bought_stocks[
-                                                    widget
-                                                        .symbol] = val -
-                                                    int.parse(
-                                                        no_of_stocks_controller
-                                                            .text);
-                                              }
-
-                                              // push the data to firebase
-                                              FirebaseFirestore.instance
-                                                  .collection('users')
-                                                  .doc(userId)
-                                                  .update({
-                                                'transactions': transactions,
-                                                'bought_stocks': bought_stocks
-                                              }).then((value) {
-                                                print(
-                                                    "new document is updated");
-                                                no_of_stocks_controller.clear();
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          const Portfolio()),
-                                                );
-                                              }).catchError((onError) => print(
-                                                      "error occurred while creating new document"));
                                             }
                                           } else {
                                             //give an error
