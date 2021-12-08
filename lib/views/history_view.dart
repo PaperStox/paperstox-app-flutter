@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:paperstox_app/colors.dart';
 import 'package:paperstox_app/views/login_view.dart';
+import 'package:paperstox_app/views/stock_details.dart';
 import '../constants.dart' as Constants;
 
 class historyView extends StatefulWidget {
@@ -80,28 +81,40 @@ class _historyViewState extends State<historyView> {
                         : 0,
                 itemBuilder: (context, index) {
                   if (transaction_data[index]['type'].toString() == "buy") {
-                    return Card(
-                      child: ListTile(
-                        tileColor: greenAccent,
-                        leading: Image.network(transaction_data[index]
-                                        ['stock_logo'] !=
-                                    null &&
-                                transaction_data[index]['stock_logo'] != ""
-                            ? transaction_data[index]['stock_logo']
-                            : "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Phi_fenomeni.gif/50px-Phi_fenomeni.gif"),
-                        title: Text(
-                          "${transaction_data[index]['symbol']} (${transaction_data[index]['company_name']})",
-                          style: const TextStyle(color: Colors.white),
+                    return InkWell(
+                      onTap: () {
+                        print(transaction_data[index]['symbol']);
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => StockDetails(
+                              symbol: transaction_data[index]['symbol'],
+                            ),
+                          ),
+                        );
+                      },
+                      child: Card(
+                        child: ListTile(
+                          tileColor: greenAccent,
+                          leading: Image.network(transaction_data[index]
+                                          ['stock_logo'] !=
+                                      null &&
+                                  transaction_data[index]['stock_logo'] != ""
+                              ? transaction_data[index]['stock_logo']
+                              : "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Phi_fenomeni.gif/50px-Phi_fenomeni.gif"),
+                          title: Text(
+                            "${transaction_data[index]['symbol']} (${transaction_data[index]['company_name']})",
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                          subtitle: Text(
+                            "stocks : ${transaction_data[index]['no_of_stocks']}" +
+                                " | total amount : ${transaction_data[index]['total_amount']}" +
+                                "\n"
+                                    "bought on ${format.format(transaction_data[index]['createdAt'].toDate()).toString()}",
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                          trailing: Text(""),
+                          isThreeLine: true,
                         ),
-                        subtitle: Text(
-                          "stocks : ${transaction_data[index]['no_of_stocks']}" +
-                              " | total amount : ${transaction_data[index]['total_amount']}" +
-                              "\n"
-                                  "bought on ${format.format(transaction_data[index]['createdAt'].toDate()).toString()}",
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                        trailing: Text(""),
-                        isThreeLine: true,
                       ),
                     );
                   } else {

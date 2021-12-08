@@ -566,7 +566,7 @@ class _StockDetailsState extends State<StockDetails> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Text("Sell Stocks"),
+                          title: const Text("Sell Stocks"),
                           content: Stack(
                             overflow: Overflow.visible,
                             children: <Widget>[
@@ -622,8 +622,11 @@ class _StockDetailsState extends State<StockDetails> {
                                   ),
                                   Padding(
                                       padding: EdgeInsets.all(8.0),
-                                      child: Text(
-                                          stockPriceDetails['c'].toString())),
+                                      child: Text(stockPriceDetails != null &&
+                                              stockPriceDetails['c'] != null &&
+                                              stockPriceDetails['c'] != ""
+                                          ? stockPriceDetails['c'].toString()
+                                          : "NA")),
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: RaisedButton(
@@ -677,6 +680,10 @@ class _StockDetailsState extends State<StockDetails> {
                                                       .toString();
 
                                               transaction_obj['type'] = "sell";
+
+                                              transaction_obj['stock_logo'] =
+                                                  stockDetails['logo']
+                                                      .toString();
 
                                               transaction_obj['no_of_stocks'] =
                                                   no_of_stocks_controller.text;
