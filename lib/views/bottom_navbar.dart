@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:paperstox_app/views/search_view.dart';
+import 'package:paperstox_app/views/settings.dart';
 import 'package:paperstox_app/views/watchlist_view.dart';
 import 'portfolio.dart';
 import 'search_view.dart';
@@ -23,10 +24,7 @@ class _BottomNavbarWidget extends State<BottomNavbarWidget> {
     SearchView(),
     const Portfolio(),
     historyView(),
-    const Text(
-      'Index 4: Settings',
-      style: optionStyle,
-    ),
+    const SettingsPage(),
   ];
 
   void _onItemTapped(int index) {
