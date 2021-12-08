@@ -47,7 +47,7 @@ class _settingsViewState extends State<settingsView> {
             currentBalance = documentSnapshot['balance'];
           });
 
-          print(currentBalance);
+          print("current balance is : " + currentBalance.toString());
         }
       });
     });
@@ -67,8 +67,8 @@ class _settingsViewState extends State<settingsView> {
         child: Center(
           child: SingleChildScrollView(
               child: Column(children: [
-            const Text(
-              'Current Balance: 1560124',
+            Text(
+              'Current Balance: ${currentBalance != null ? currentBalance.toString() : "NA"}',
               textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
@@ -100,6 +100,7 @@ class _settingsViewState extends State<settingsView> {
                         style: const TextStyle(color: Colors.white),
                         controller: credit_balance_controller,
                         cursorColor: greenAccent,
+                        keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
                           fillColor: Colors.black,
                           filled: true,

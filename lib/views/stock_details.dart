@@ -396,6 +396,7 @@ class _StockDetailsState extends State<StockDetails> {
 
                                     // text form field for buy stocks
                                     child: TextFormField(
+                                      keyboardType: TextInputType.number,
                                       style:
                                           const TextStyle(color: Colors.white),
                                       cursorColor: greenAccent,
@@ -591,6 +592,7 @@ class _StockDetailsState extends State<StockDetails> {
 
                                     // text form field for buy stocks
                                     child: TextFormField(
+                                      keyboardType: TextInputType.number,
                                       style:
                                           const TextStyle(color: Colors.white),
                                       cursorColor: greenAccent,
