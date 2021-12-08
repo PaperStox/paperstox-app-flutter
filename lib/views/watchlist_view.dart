@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:paperstox_app/colors.dart';
 import '../main.dart';
+import './logout.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
@@ -50,7 +51,9 @@ class _WatchlistView extends State<WatchlistView> {
           Padding(
               padding: const EdgeInsets.only(right: 20.0),
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  showLogoutDialog(context, auth);
+                },
                 child: const Icon(
                   Icons.logout,
                   size: 25,
