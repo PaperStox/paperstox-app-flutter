@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:paperstox_app/colors.dart';
+import 'package:paperstox_app/views/stock_details.dart';
 import '../main.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
@@ -103,28 +104,40 @@ class _SearchView extends State<SearchView> {
               itemCount: stockList != null ? stockList['count'] : 0,
               itemBuilder: (context, index) {
                 return Card(
-                  child: ListTile(
-                    tileColor: Colors.black,
-                    title: Text(stockList['result'][index]['description'],
-                        style: const TextStyle(
-                            color: greenAccent,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold)),
-                    subtitle: Text(stockList['result'][index]['displaySymbol'],
-                        style: const TextStyle(color: greenAccent)),
-                    isThreeLine: true,
-                    trailing: IconButton(
-                      color: greenAccent,
-                      icon: const Icon(Icons.add_box_outlined),
-                      onPressed: () {
-                        users.doc(auth.currentUser!.uid.toString()).update({
-                          'watchlist': FieldValue.arrayUnion(
-                              [stockList['result'][index]]),
-                          // Add a snackbar when the stock is added to the watchlist
-                        });
+                  child: InkWell(
+                    child: ListTile(
+                      tileColor: Colors.black,
+                      title: Text(stockList['result'][index]['description'],
+                          style: const TextStyle(
+                              color: greenAccent,
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold)),
+                      subtitle: Text(
+                          stockList['result'][index]['displaySymbol'],
+                          style: const TextStyle(color: greenAccent)),
+                      isThreeLine: true,
+                      trailing: IconButton(
+                        color: greenAccent,
+                        icon: const Icon(Icons.add_box_outlined),
+                        onPressed: () {
+                          users.doc(auth.currentUser!.uid.toString()).update({
+                            'watchlist': FieldValue.arrayUnion(
+                                [stockList['result'][index]]),
+                            // Add a snackbar when the stock is added to the watchlist
+                          });
+                        },
+                      ),
+                      onTap: () {
+                        print(stockList['result'][index]['symbol']);
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => StockDetails(
+                              symbol: stockList['result'][index]['symbol'],
+                            ),
+                          ),
+                        );
                       },
                     ),
-                    onTap: () {},
                   ),
                 );
               },

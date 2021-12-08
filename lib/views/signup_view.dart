@@ -202,6 +202,8 @@ class _SignUpView extends State<SignUpView> {
                                 'email': emailController.text,
                                 'uid': userCredential.user!.uid,
                                 'watchlist': [],
+                                'transactions': [],
+                                'bought_stocks': {},
                               });
 
                               Navigator.push(
