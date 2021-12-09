@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:paperstox_app/colors.dart';
 import 'package:http/http.dart' as http;
+import 'package:paperstox_app/views/bottom_navbar.dart';
 import 'package:paperstox_app/views/login_view.dart';
 import 'package:paperstox_app/views/portfolio.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -596,12 +597,12 @@ class _StockDetailsState extends State<StockDetails> {
                                                   total_amount = 0;
                                                 });
                                                 no_of_stocks_controller.clear();
-                                                // Navigator.push(
-                                                //   context,
-                                                //   MaterialPageRoute(
-                                                //       builder: (context) =>
-                                                //           const Portfolio()),
-                                                // );
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          BottomNavbarWidget()),
+                                                );
                                               }).catchError((onError) => print(
                                                       "error occurred while creating new document"));
                                             } else {
@@ -844,7 +845,7 @@ class _StockDetailsState extends State<StockDetails> {
                                                         context,
                                                         MaterialPageRoute(
                                                             builder: (context) =>
-                                                                const Portfolio()),
+                                                                const BottomNavbarWidget()),
                                                       );
                                                     }).catchError((onError) =>
                                                             print(
