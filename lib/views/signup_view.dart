@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'portfolio.dart';
+import 'bottom_navbar.dart';
 import '../colors.dart';
 
 class SignUpView extends StatefulWidget {
@@ -202,12 +202,16 @@ class _SignUpView extends State<SignUpView> {
                                 'email': emailController.text,
                                 'uid': userCredential.user!.uid,
                                 'watchlist': [],
+                                'balance': 1000,
+                                'transactions': [],
+                                'bought_stocks': [],
                               });
 
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => Portfolio()),
+                                    builder: (context) =>
+                                        const BottomNavbarWidget()),
                               );
 
                               ScaffoldMessenger.of(context)
