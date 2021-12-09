@@ -56,33 +56,39 @@ class _Portfolio extends State<Portfolio> {
             child: ListView.builder(
               itemCount: portfolio != null ? portfolio.length : 0,
               itemBuilder: (context, index) {
-                return Card(
-                    color: Colors.black,
-                    child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: ListTile(
-                          title: Text(
-                            portfolio[index]['ticker'],
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                          onTap: () {
-                            if (portfolio[index] != null &&
-                                portfolio[index]['ticker'] != null) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => StockDetails(
-                                        symbol: portfolio[index]['ticker'])),
-                              );
-                            }
-                          },
-                          subtitle: Text(
-                              "\n" +
-                                  "Qty: " +
-                                  portfolio[index]['count'].toString() +
-                                  "\n\n",
-                              style: const TextStyle(color: Colors.white)),
-                        )));
+                if (portfolio[index]['count'] != 0) {
+                  return Card(
+                      color: Colors.black,
+                      child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: ListTile(
+                            title: Text(
+                              portfolio[index]['ticker'],
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                            onTap: () {
+                              if (portfolio[index] != null &&
+                                  portfolio[index]['ticker'] != null) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => StockDetails(
+                                          symbol: portfolio[index]['ticker'])),
+                                );
+                              }
+                            },
+                            subtitle: Text(
+                                "\n" +
+                                    "Qty: " +
+                                    portfolio[index]['count'].toString() +
+                                    "\n\n",
+                                style: const TextStyle(color: Colors.white)),
+                          )));
+                } else {
+                  return Container(
+                    height: 0,
+                  );
+                }
               },
             ),
           ),

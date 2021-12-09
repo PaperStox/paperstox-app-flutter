@@ -661,7 +661,7 @@ class _StockDetailsState extends State<StockDetails> {
                                           : "NA")),
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: RaisedButton(
+                                    child: ElevatedButton(
                                       child:
                                           Text("Sell ${widget.symbol} stocks"),
                                       onPressed: () {
