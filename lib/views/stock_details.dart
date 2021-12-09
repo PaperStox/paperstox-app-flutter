@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:paperstox_app/colors.dart';
 import 'package:http/http.dart' as http;
+import 'package:paperstox_app/views/bottom_navbar.dart';
 import 'package:paperstox_app/views/login_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

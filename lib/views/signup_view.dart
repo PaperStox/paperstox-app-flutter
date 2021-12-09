@@ -202,7 +202,7 @@ class _SignUpView extends State<SignUpView> {
                                 'email': emailController.text,
                                 'uid': userCredential.user!.uid,
                                 'watchlist': [],
-                                'balance': 100,
+                                'balance': 1000,
                                 'transactions': [],
                                 'bought_stocks': [],
                               });

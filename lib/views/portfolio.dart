@@ -38,19 +38,22 @@ class _Portfolio extends State<Portfolio> {
     }
 
     return Scaffold(
-        appBar: AppBar(title: const Text("Portfolio"), actions: <Widget>[
-          Padding(
-              padding: const EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                onTap: () {
-                  showLogoutDialog(context, auth);
-                },
-                child: const Icon(
-                  Icons.logout,
-                  size: 25,
-                ),
-              )),
-        ]),
+        appBar: AppBar(
+            title: const Text("Portfolio"),
+            automaticallyImplyLeading: false,
+            actions: <Widget>[
+              Padding(
+                  padding: const EdgeInsets.only(right: 20.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      showLogoutDialog(context, auth);
+                    },
+                    child: const Icon(
+                      Icons.logout,
+                      size: 25,
+                    ),
+                  )),
+            ]),
         body: Container(
           color: Colors.black,
           child: Center(

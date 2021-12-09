@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:paperstox_app/views/bottom_navbar.dart';
 import 'package:paperstox_app/views/login_view.dart';
+import 'package:paperstox_app/views/logout.dart';
 
 class settingsView extends StatefulWidget {
   settingsView({Key? key}) : super(key: key);
@@ -18,6 +19,7 @@ class _settingsViewState extends State<settingsView> {
 
   final password_controller = TextEditingController();
   final credit_balance_controller = TextEditingController();
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
   void initState() {
@@ -57,7 +59,23 @@ class _settingsViewState extends State<settingsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Settings")),
+      appBar: AppBar(
+          title: const Text("Settings"),
+          automaticallyImplyLeading: false,
+          actions: <Widget>[
+            Padding(
+                padding: const EdgeInsets.only(right: 20.0),
+                child: GestureDetector(
+                  onTap: () {
+                    // add the signout in history page
+                    showLogoutDialog(context, auth);
+                  },
+                  child: const Icon(
+                    Icons.logout,
+                    size: 25,
+                  ),
+                )),
+          ]),
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
