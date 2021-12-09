@@ -1,16 +1,7 @@
-# paperstox_app
+# PaperStox
 
-A new Flutter project.
+This way you won’t lose c̶o̶n̶f̶i̶d̶e̶n̶c̶e̶ money.
 
-## Getting Started
+## Project Description
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+PaperStox is a stock paper-trading application. A paper trade is a simulated trade that allows an investor to practice buying and selling without risking real money. PaperStox allows users to register on the platform and create a fixed budget for themselves, using which they can purchase stocks across US stock exchanges.
