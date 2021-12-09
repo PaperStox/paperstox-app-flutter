@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:paperstox_app/colors.dart';
 import '../main.dart';
+import 'stock_details.dart';
 import './logout.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
@@ -47,19 +48,22 @@ class _WatchlistView extends State<WatchlistView> {
       fetchWatchlist();
     }
     return Scaffold(
-        appBar: AppBar(title: const Text("Watchlist"), actions: <Widget>[
-          Padding(
-              padding: const EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                onTap: () {
-                  showLogoutDialog(context, auth);
-                },
-                child: const Icon(
-                  Icons.logout,
-                  size: 25,
-                ),
-              )),
-        ]),
+        appBar: AppBar(
+            title: const Text("Watchlist"),
+            automaticallyImplyLeading: false,
+            actions: <Widget>[
+              Padding(
+                  padding: const EdgeInsets.only(right: 20.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      showLogoutDialog(context, auth);
+                    },
+                    child: const Icon(
+                      Icons.logout,
+                      size: 25,
+                    ),
+                  )),
+            ]),
         body: Container(
           child: ListView(children: [
             ListView.builder(
@@ -75,14 +79,14 @@ class _WatchlistView extends State<WatchlistView> {
                     title: Text(stockList[index]['description'],
                         style: const TextStyle(
                             color: greenAccent,
-                            fontSize: 20.0,
+                            fontSize: 18.0,
                             fontWeight: FontWeight.bold)),
-                    subtitle: Text(stockList[index]['displaySymbol'],
-                        style: const TextStyle(color: greenAccent)),
+                    subtitle: Text("\n" + stockList[index]['displaySymbol'],
+                        style: const TextStyle(color: Colors.white)),
                     isThreeLine: true,
                     trailing: IconButton(
-                      color: greenAccent,
-                      icon: const Icon(Icons.remove),
+                      color: Colors.red,
+                      icon: const Icon(Icons.remove_circle_outline),
                       onPressed: () {
                         users.doc(auth.currentUser!.uid.toString()).update({
                           'watchlist':
@@ -92,13 +96,23 @@ class _WatchlistView extends State<WatchlistView> {
                         fetchWatchlist();
                       },
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      if (stockList[index] != null &&
+                          stockList[index]['displaySymbol'] != null) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => StockDetails(
+                                  symbol: stockList[index]['displaySymbol'])),
+                        );
+                      }
+                    },
                   ),
                 );
               },
             ),
           ]),
-          color: blackPrimary,
+          color: Colors.black,
         ));
   }
 }

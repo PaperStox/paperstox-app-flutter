@@ -4,10 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:paperstox_app/colors.dart';
-import '../main.dart';
-import './portfolio.dart';
+import 'package:paperstox_app/views/stock_details.dart';
 import './logout.dart';
-import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
 class SearchView extends StatefulWidget {
@@ -60,19 +58,22 @@ class _SearchView extends State<SearchView> {
     }
     CollectionReference users = firestore.collection('users');
     return Scaffold(
-        appBar: AppBar(title: const Text("Search"), actions: <Widget>[
-          Padding(
-              padding: const EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                onTap: () {
-                  showLogoutDialog(context, auth);
-                },
-                child: const Icon(
-                  Icons.logout,
-                  size: 25,
-                ),
-              )),
-        ]),
+        appBar: AppBar(
+            title: const Text("Search"),
+            automaticallyImplyLeading: false,
+            actions: <Widget>[
+              Padding(
+                  padding: const EdgeInsets.only(right: 20.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      showLogoutDialog(context, auth);
+                    },
+                    child: const Icon(
+                      Icons.logout,
+                      size: 25,
+                    ),
+                  )),
+            ]),
         body: Container(
           child: ListView(children: [
             TextField(
@@ -121,50 +122,61 @@ class _SearchView extends State<SearchView> {
               shrinkWrap: true,
               itemCount: stockList != null ? stockList['count'] : 0,
               itemBuilder: (context, index) {
-                return Card(
-                  child: ListTile(
-                    tileColor: Colors.black,
-                    title: Text(stockList['result'][index]['description'],
-                        style: const TextStyle(
-                            color: greenAccent,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold)),
-                    subtitle: Text(stockList['result'][index]['displaySymbol'],
-                        style: const TextStyle(color: greenAccent)),
-                    isThreeLine: true,
-                    trailing: IconButton(
-                      color: greenAccent,
-                      icon: const Icon(Icons.add_box_outlined),
-                      onPressed: () {
-                        watchlist.forEach((stock) => {
-                              if (stock['displaySymbol'] ==
-                                  stockList['result'][index]['displaySymbol'])
-                                {flag = true}
+                return InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => StockDetails(
+                          symbol: stockList['result'][index]['symbol'],
+                        ),
+                      ),
+                    );
+                  },
+                  child: Card(
+                    child: ListTile(
+                      tileColor: Colors.black,
+                      title: Text(stockList['result'][index]['description'],
+                          style: const TextStyle(
+                              color: greenAccent,
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold)),
+                      subtitle: Text(
+                          "\n" + stockList['result'][index]['displaySymbol'],
+                          style: const TextStyle(color: Colors.white)),
+                      isThreeLine: true,
+                      trailing: IconButton(
+                        color: greenAccent,
+                        icon: const Icon(Icons.add_box_outlined),
+                        onPressed: () {
+                          watchlist.forEach((stock) => {
+                                if (stock['displaySymbol'] ==
+                                    stockList['result'][index]['displaySymbol'])
+                                  {flag = true}
+                              });
+                          if (flag == false) {
+                            users.doc(auth.currentUser!.uid.toString()).update({
+                              'watchlist': FieldValue.arrayUnion(
+                                  [stockList['result'][index]]),
                             });
-                        if (flag == false) {
-                          users.doc(auth.currentUser!.uid.toString()).update({
-                            'watchlist': FieldValue.arrayUnion(
-                                [stockList['result'][index]]),
-                          });
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                            content: Text("Added to your watchlist"),
-                          ));
-                        } else {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                            content: Text("Already added to your watchlist"),
-                          ));
-                        }
-                      },
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text("Added to your watchlist"),
+                            ));
+                          } else {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text("Already added to your watchlist"),
+                            ));
+                          }
+                        },
+                      ),
                     ),
-                    onTap: () {},
                   ),
                 );
               },
             ),
           ]),
-          color: blackPrimary,
+          color: Colors.black,
         ));
   }
 }
