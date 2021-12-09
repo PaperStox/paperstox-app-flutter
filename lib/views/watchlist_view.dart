@@ -79,11 +79,11 @@ class _WatchlistView extends State<WatchlistView> {
                             fontSize: 20.0,
                             fontWeight: FontWeight.bold)),
                     subtitle: Text(stockList[index]['displaySymbol'],
-                        style: const TextStyle(color: greenAccent)),
+                        style: const TextStyle(color: Colors.white)),
                     isThreeLine: true,
                     trailing: IconButton(
-                      color: greenAccent,
-                      icon: const Icon(Icons.remove),
+                      color: Colors.red,
+                      icon: const Icon(Icons.remove_circle_outline),
                       onPressed: () {
                         users.doc(auth.currentUser!.uid.toString()).update({
                           'watchlist':
@@ -109,7 +109,7 @@ class _WatchlistView extends State<WatchlistView> {
               },
             ),
           ]),
-          color: blackPrimary,
+          color: Colors.black,
         ));
   }
 }

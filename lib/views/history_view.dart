@@ -94,7 +94,7 @@ class _historyViewState extends State<historyView> {
                       },
                       child: Card(
                         child: ListTile(
-                          tileColor: greenAccent,
+                          tileColor: Colors.black,
                           leading: Image.network(transaction_data[index]
                                           ['stock_logo'] !=
                                       null &&

@@ -180,7 +180,7 @@ class _StockDetailsState extends State<StockDetails> {
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: greenAccent,
+                    color: blackPrimary,
                   ),
                   padding: EdgeInsets.all(15.0),
                   // this is big row which shows metadata of stock
@@ -249,7 +249,7 @@ class _StockDetailsState extends State<StockDetails> {
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: greenAccent,
+                    color: blackPrimary,
                   ),
                   padding: EdgeInsets.all(15.0),
                   // this is big row which shows metadata of stock
@@ -352,19 +352,32 @@ class _StockDetailsState extends State<StockDetails> {
                     }
                   },
                   child: ListTile(
-                    tileColor: Colors.white,
+                    tileColor: blackPrimary,
                     leading: newsArray != null && newsArray.length > 0
                         ? Image.network(newsArray[0]['image'].toString())
                         : Image.network(
                             "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Phi_fenomeni.gif/50px-Phi_fenomeni.gif"),
                     title: newsArray != null && newsArray.length > 0
-                        ? Text(newsArray[0]['headline'],
-                            overflow: TextOverflow.ellipsis)
+                        ? Text(
+                            newsArray[0]['headline'],
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          )
                         : const Text("NA"),
                     subtitle: newsArray != null && newsArray.length > 0
-                        ? Text(newsArray[0]['summary'].length > 80
-                            ? newsArray[0]['summary'].substring(0, 80) + "..."
-                            : newsArray[0]['summary'])
+                        ? Text(
+                            newsArray[0]['summary'].length > 80
+                                ? newsArray[0]['summary'].substring(0, 80) +
+                                    "..."
+                                : newsArray[0]['summary'],
+                            style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          )
                         : const Text("NA"),
                     isThreeLine: true,
                   ),
