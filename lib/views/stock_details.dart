@@ -374,7 +374,7 @@ class _StockDetailsState extends State<StockDetails> {
                                     "..."
                                 : newsArray[0]['summary'],
                             style: const TextStyle(
-                                fontSize: 18.0, color: Colors.white),
+                                fontSize: 16.0, color: Colors.white),
                           )
                         : const Text("NA"),
                     isThreeLine: true,

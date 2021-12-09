@@ -134,6 +134,9 @@ class _settingsViewState extends State<settingsView> {
                         ),
                       ),
                     ),
+                    const SizedBox(
+                      height: 5,
+                    ),
                     SizedBox(
                       height: 55,
                       width: 320,
@@ -166,7 +169,7 @@ class _settingsViewState extends State<settingsView> {
                         },
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 40),
                     const Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: 25, vertical: 16),
