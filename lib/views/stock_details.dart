@@ -1,14 +1,11 @@
 import 'dart:convert';
 
-import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:paperstox_app/colors.dart';
-import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:paperstox_app/views/login_view.dart';
 import 'package:paperstox_app/views/portfolio.dart';
-import 'package:url_launcher/link.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -30,9 +27,10 @@ class _StockDetailsState extends State<StockDetails> {
   var newsArray;
   var stockPriceDetails;
   var userId;
+  var currentBalance;
 
   double total_amount = 0;
-  Map<String, dynamic> boughr_stocks = {};
+  Map<String, dynamic> bought_stocks = {};
   final no_of_stocks_controller = TextEditingController();
 
   // init state
@@ -51,6 +49,23 @@ class _StockDetailsState extends State<StockDetails> {
       });
 
       print("userId is $userId");
+
+      // get all transaction data
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get()
+          .then((DocumentSnapshot documentSnapshot) {
+        if (documentSnapshot.exists) {
+          print('Document exists on the database');
+
+          setState(() {
+            currentBalance = documentSnapshot['balance'];
+          });
+
+          print("current balance is : " + currentBalance.toString());
+        }
+      });
     });
 
     // calling all the data related tot his symbol from api
@@ -437,129 +452,168 @@ class _StockDetailsState extends State<StockDetails> {
                                           Text("Buy ${widget.symbol} stocks"),
                                       onPressed: () {
                                         // get the complete user data from backend
-                                        FirebaseFirestore.instance
-                                            .collection('users')
-                                            .doc(userId)
-                                            .get()
-                                            .then((DocumentSnapshot
-                                                documentSnapshot) {
-                                          if (documentSnapshot.exists) {
-                                            Map<String, dynamic> data =
-                                                documentSnapshot.data()!
-                                                    as Map<String, dynamic>;
+                                        if (currentBalance > total_amount) {
+                                          // user can buy the stock
+                                          FirebaseFirestore.instance
+                                              .collection('users')
+                                              .doc(userId)
+                                              .get()
+                                              .then((DocumentSnapshot
+                                                  documentSnapshot) {
+                                            if (documentSnapshot.exists) {
+                                              Map<String, dynamic> data =
+                                                  documentSnapshot.data()!
+                                                      as Map<String, dynamic>;
 
-                                            // get the transactions array from the database
-                                            var transactions =
-                                                data['transactions'];
+                                              // get the transactions array from the database
+                                              var transactions =
+                                                  data['transactions'];
 
-                                            // get the bought_stocks array from the database
-                                            var bought_stocks =
-                                                data['bought_stocks'];
+                                              // get the bought_stocks array from the database
+                                              var bought_stocks =
+                                                  data['bought_stocks'];
 
-                                            // update transaction array
-                                            Map<String, dynamic>
-                                                transaction_obj =
-                                                new Map<String, dynamic>();
-                                            transaction_obj['symbol'] =
-                                                widget.symbol.toString();
-
-                                            transaction_obj['company_name'] =
-                                                stockDetails['name'].toString();
-
-                                            transaction_obj['current_price'] =
-                                                stockPriceDetails['c']
-                                                    .toString();
-
-                                            transaction_obj['type'] =
-                                                stockPriceDetails['type'] =
-                                                    "buy";
-
-                                            transaction_obj['stock_logo'] =
-                                                stockDetails['logo'].toString();
-
-                                            transaction_obj['no_of_stocks'] =
-                                                no_of_stocks_controller.text;
-
-                                            transaction_obj['total_amount'] =
-                                                total_amount;
-
-                                            transaction_obj['createdAt'] =
-                                                DateTime.now();
-
-                                            transactions.add(transaction_obj);
-
-                                            var flag = 0;
-                                            if (bought_stocks.length > 0) {
-                                              // check if stock is already present in it or not
-                                              for (int i = 0;
-                                                  i < bought_stocks.length;
-                                                  i++) {
-                                                var item = bought_stocks[i];
-                                                if (item['ticker'].toString() ==
-                                                    widget.symbol) {
-                                                  // stocks are already bought at some time
-                                                  flag = 1;
-                                                }
-                                              }
-                                            }
-
-                                            if (flag == 1) {
-                                              // stocks already bought
-                                              for (int i = 0;
-                                                  i < bought_stocks.length;
-                                                  i++) {
-                                                var item = bought_stocks[i];
-                                                if (item['ticker'].toString() ==
-                                                    widget.symbol) {
-                                                  // go the object update it
-                                                  var val = item['count'];
-                                                  item['count'] = val +
-                                                      int.parse(
-                                                          no_of_stocks_controller
-                                                              .text);
-                                                }
-                                              }
-                                            } else {
-                                              // user has not bought this stocks already
+                                              // update transaction array
                                               Map<String, dynamic>
-                                                  bought_stock_obj =
+                                                  transaction_obj =
                                                   new Map<String, dynamic>();
-
-                                              bought_stock_obj['ticker'] =
+                                              transaction_obj['symbol'] =
                                                   widget.symbol.toString();
 
-                                              bought_stock_obj['count'] =
-                                                  int.parse(
-                                                      no_of_stocks_controller
-                                                          .text);
+                                              transaction_obj['company_name'] =
+                                                  stockDetails['name']
+                                                      .toString();
 
-                                              bought_stocks
-                                                  .add(bought_stock_obj);
+                                              transaction_obj['current_price'] =
+                                                  stockPriceDetails['c']
+                                                      .toString();
+
+                                              transaction_obj['type'] =
+                                                  stockPriceDetails['type'] =
+                                                      "buy";
+
+                                              transaction_obj['stock_logo'] =
+                                                  stockDetails['logo']
+                                                      .toString();
+
+                                              transaction_obj['no_of_stocks'] =
+                                                  no_of_stocks_controller.text;
+
+                                              transaction_obj['total_amount'] =
+                                                  total_amount;
+
+                                              transaction_obj['createdAt'] =
+                                                  DateTime.now();
+
+                                              transactions.add(transaction_obj);
+
+                                              // update the currentBalance
+                                              var cBalance = currentBalance;
+                                              cBalance =
+                                                  cBalance - total_amount;
+
+                                              var flag = 0;
+                                              if (bought_stocks.length > 0) {
+                                                // check if stock is already present in it or not
+                                                for (int i = 0;
+                                                    i < bought_stocks.length;
+                                                    i++) {
+                                                  var item = bought_stocks[i];
+                                                  if (item['ticker']
+                                                          .toString() ==
+                                                      widget.symbol) {
+                                                    // stocks are already bought at some time
+                                                    flag = 1;
+                                                  }
+                                                }
+                                              }
+
+                                              if (flag == 1) {
+                                                // stocks already bought
+                                                for (int i = 0;
+                                                    i < bought_stocks.length;
+                                                    i++) {
+                                                  var item = bought_stocks[i];
+                                                  if (item['ticker']
+                                                          .toString() ==
+                                                      widget.symbol) {
+                                                    // go the object update it
+                                                    var val = item['count'];
+                                                    item['count'] = val +
+                                                        int.parse(
+                                                            no_of_stocks_controller
+                                                                .text);
+                                                  }
+                                                }
+                                              } else {
+                                                // user has not bought this stocks already
+                                                Map<String, dynamic>
+                                                    bought_stock_obj =
+                                                    new Map<String, dynamic>();
+
+                                                bought_stock_obj['ticker'] =
+                                                    widget.symbol.toString();
+
+                                                bought_stock_obj['count'] =
+                                                    int.parse(
+                                                        no_of_stocks_controller
+                                                            .text);
+
+                                                if (bought_stock_obj[
+                                                        'avg_price'] !=
+                                                    null) {
+                                                  bought_stock_obj[
+                                                      'avg_price'] = double
+                                                          .parse(
+                                                              bought_stock_obj[
+                                                                  'avg_price']) +
+                                                      double.parse(
+                                                              stockPriceDetails[
+                                                                  'c']) /
+                                                          2;
+                                                } else {
+                                                  bought_stock_obj[
+                                                          'avg_price'] =
+                                                      stockPriceDetails['c'];
+                                                }
+
+                                                bought_stocks
+                                                    .add(bought_stock_obj);
+                                              }
+
+                                              // push the data to firebase
+                                              FirebaseFirestore.instance
+                                                  .collection('users')
+                                                  .doc(userId)
+                                                  .update({
+                                                'transactions': transactions,
+                                                'bought_stocks': bought_stocks,
+                                                'balance': cBalance
+                                              }).then((value) {
+                                                print(
+                                                    "new document is updated");
+                                                setState(() {
+                                                  total_amount = 0;
+                                                });
+                                                no_of_stocks_controller.clear();
+                                                // Navigator.push(
+                                                //   context,
+                                                //   MaterialPageRoute(
+                                                //       builder: (context) =>
+                                                //           const Portfolio()),
+                                                // );
+                                              }).catchError((onError) => print(
+                                                      "error occurred while creating new document"));
+                                            } else {
+                                              print(
+                                                  "document does not exists in the datavbase");
                                             }
-
-                                            // push the data to firebase
-                                            FirebaseFirestore.instance
-                                                .collection('users')
-                                                .doc(userId)
-                                                .update({
-                                              'transactions': transactions,
-                                              'bought_stocks': bought_stocks
-                                            }).then((value) {
-                                              print("new document is updated");
-                                              no_of_stocks_controller.clear();
-                                              // Navigator.push(
-                                              //   context,
-                                              //   MaterialPageRoute(
-                                              //       builder: (context) =>
-                                              //           const Portfolio()),
-                                              // );
-                                            }).catchError((onError) => print(
-                                                    "error occurred while creating new document"));
-                                          } else {
-                                            print(
-                                                "document does not exists in the datavbase");
-                                          }
-                                        });
+                                          });
+                                        } else {
+                                          // user cannot buy the stock
+                                          showErrorDiaogForCurrentBalance(
+                                              context);
+                                        }
                                       },
                                     ),
                                   )
@@ -761,6 +815,13 @@ class _StockDetailsState extends State<StockDetails> {
                                                             no_of_stocks_controller
                                                                 .text);
 
+                                                    // update the balance
+                                                    var cBalance =
+                                                        currentBalance;
+
+                                                    cBalance =
+                                                        cBalance + total_amount;
+
                                                     // push the data to firebase
                                                     FirebaseFirestore.instance
                                                         .collection('users')
@@ -769,10 +830,14 @@ class _StockDetailsState extends State<StockDetails> {
                                                       'transactions':
                                                           transactions,
                                                       'bought_stocks':
-                                                          bought_stocks
+                                                          bought_stocks,
+                                                      'balance': cBalance
                                                     }).then((value) {
                                                       print(
                                                           "new document is updated");
+                                                      setState(() {
+                                                        total_amount = 0;
+                                                      });
                                                       no_of_stocks_controller
                                                           .clear();
                                                       Navigator.push(
@@ -881,6 +946,32 @@ class _StockDetailsState extends State<StockDetails> {
             child: ListBody(
               children: const <Widget>[
                 Text('You do not have enough stocks to sell.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("Ok"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void showErrorDiaogForCurrentBalance(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Error!!"),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text('You do not have enough balance to purchase the stocks.'),
               ],
             ),
           ),

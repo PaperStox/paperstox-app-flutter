@@ -81,6 +81,8 @@ class _Portfolio extends State<Portfolio> {
                                 "\n" +
                                     "Qty: " +
                                     portfolio[index]['count'].toString() +
+                                    "   Avg price: " +
+                                    portfolio[index]['avg_price'].toString() +
                                     "\n\n",
                                 style: const TextStyle(color: Colors.white)),
                           )));
