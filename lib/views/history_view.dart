@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:paperstox_app/colors.dart';
 import 'package:paperstox_app/views/login_view.dart';
+import 'package:paperstox_app/views/logout.dart';
 import 'package:paperstox_app/views/stock_details.dart';
 import '../constants.dart' as Constants;
 
@@ -20,6 +21,7 @@ class _historyViewState extends State<historyView> {
   var format = DateFormat("d/M/y hh:mm a");
   var transaction_data;
   var userId;
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
   void initState() {
@@ -59,19 +61,23 @@ class _historyViewState extends State<historyView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text("History"), actions: <Widget>[
-          Padding(
-              padding: const EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                onTap: () {
-                  // add the signout in history page
-                },
-                child: const Icon(
-                  Icons.logout,
-                  size: 25,
-                ),
-              )),
-        ]),
+        appBar: AppBar(
+            title: const Text("History"),
+            automaticallyImplyLeading: false,
+            actions: <Widget>[
+              Padding(
+                  padding: const EdgeInsets.only(right: 20.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      // add the signout in history page
+                      showLogoutDialog(context, auth);
+                    },
+                    child: const Icon(
+                      Icons.logout,
+                      size: 25,
+                    ),
+                  )),
+            ]),
         backgroundColor: Colors.black,
         body: transaction_data != null && transaction_data.length > 0
             ? ListView.builder(

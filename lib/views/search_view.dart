@@ -61,19 +61,22 @@ class _SearchView extends State<SearchView> {
     }
     CollectionReference users = firestore.collection('users');
     return Scaffold(
-        appBar: AppBar(title: const Text("Search"), actions: <Widget>[
-          Padding(
-              padding: const EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                onTap: () {
-                  showLogoutDialog(context, auth);
-                },
-                child: const Icon(
-                  Icons.logout,
-                  size: 25,
-                ),
-              )),
-        ]),
+        appBar: AppBar(
+            title: const Text("Search"),
+            automaticallyImplyLeading: false,
+            actions: <Widget>[
+              Padding(
+                  padding: const EdgeInsets.only(right: 20.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      showLogoutDialog(context, auth);
+                    },
+                    child: const Icon(
+                      Icons.logout,
+                      size: 25,
+                    ),
+                  )),
+            ]),
         body: Container(
           child: ListView(children: [
             TextField(
