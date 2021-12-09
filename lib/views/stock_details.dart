@@ -547,12 +547,12 @@ class _StockDetailsState extends State<StockDetails> {
                                             }).then((value) {
                                               print("new document is updated");
                                               no_of_stocks_controller.clear();
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        const Portfolio()),
-                                              );
+                                              // Navigator.push(
+                                              //   context,
+                                              //   MaterialPageRoute(
+                                              //       builder: (context) =>
+                                              //           const Portfolio()),
+                                              // );
                                             }).catchError((onError) => print(
                                                     "error occurred while creating new document"));
                                           } else {

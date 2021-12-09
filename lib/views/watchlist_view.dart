@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:paperstox_app/colors.dart';
 import '../main.dart';
+import 'stock_details.dart';
 import './logout.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
@@ -92,7 +93,17 @@ class _WatchlistView extends State<WatchlistView> {
                         fetchWatchlist();
                       },
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      if (stockList[index] != null &&
+                          stockList[index]['displaySymbol'] != null) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => StockDetails(
+                                  symbol: stockList[index]['displaySymbol'])),
+                        );
+                      }
+                    },
                   ),
                 );
               },
