@@ -35,7 +35,6 @@ class _WatchlistView extends State<WatchlistView> {
         .where("uid", isEqualTo: auth.currentUser!.uid.toString())
         .get()
         .then((querySnapshot) {
-      print(querySnapshot.docs.toString());
       setState(() => stockList = querySnapshot.docs[0]['watchlist']);
     });
   }
