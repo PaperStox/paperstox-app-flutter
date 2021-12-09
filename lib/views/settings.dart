@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:paperstox_app/views/bottom_navbar.dart';
 import 'package:paperstox_app/views/login_view.dart';
-import 'package:paperstox_app/views/portfolio.dart';
 
 class settingsView extends StatefulWidget {
   settingsView({Key? key}) : super(key: key);
@@ -70,7 +69,7 @@ class _settingsViewState extends State<settingsView> {
           child: SingleChildScrollView(
               child: Column(children: [
             Text(
-              'Current Balance: ${currentBalance != null ? currentBalance.toString() : "NA"}',
+              'Current Balance: \$${currentBalance != null ? currentBalance.toStringAsFixed(2) : "NA"}',
               textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
@@ -149,6 +148,7 @@ class _settingsViewState extends State<settingsView> {
                         },
                       ),
                     ),
+                    const SizedBox(height: 20),
                     const Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: 25, vertical: 16),

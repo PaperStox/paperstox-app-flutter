@@ -76,9 +76,9 @@ class _WatchlistView extends State<WatchlistView> {
                     title: Text(stockList[index]['description'],
                         style: const TextStyle(
                             color: greenAccent,
-                            fontSize: 20.0,
+                            fontSize: 18.0,
                             fontWeight: FontWeight.bold)),
-                    subtitle: Text(stockList[index]['displaySymbol'],
+                    subtitle: Text("\n" + stockList[index]['displaySymbol'],
                         style: const TextStyle(color: Colors.white)),
                     isThreeLine: true,
                     trailing: IconButton(

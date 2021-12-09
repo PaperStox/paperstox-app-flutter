@@ -5,10 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:paperstox_app/colors.dart';
 import 'package:paperstox_app/views/stock_details.dart';
-import '../main.dart';
-import './portfolio.dart';
 import './logout.dart';
-import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
 class SearchView extends StatefulWidget {
@@ -138,11 +135,11 @@ class _SearchView extends State<SearchView> {
                       title: Text(stockList['result'][index]['description'],
                           style: const TextStyle(
                               color: greenAccent,
-                              fontSize: 20.0,
+                              fontSize: 18.0,
                               fontWeight: FontWeight.bold)),
                       subtitle: Text(
-                          stockList['result'][index]['displaySymbol'],
-                          style: const TextStyle(color: greenAccent)),
+                          "\n" + stockList['result'][index]['displaySymbol'],
+                          style: const TextStyle(color: Colors.white)),
                       isThreeLine: true,
                       trailing: IconButton(
                         color: greenAccent,
@@ -176,7 +173,7 @@ class _SearchView extends State<SearchView> {
               },
             ),
           ]),
-          color: blackPrimary,
+          color: Colors.black,
         ));
   }
 }

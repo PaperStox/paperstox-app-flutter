@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:paperstox_app/colors.dart';
 import '../main.dart';
 import 'stock_details.dart';
 import './logout.dart';
@@ -64,7 +65,10 @@ class _Portfolio extends State<Portfolio> {
                           child: ListTile(
                             title: Text(
                               portfolio[index]['ticker'],
-                              style: const TextStyle(color: Colors.white),
+                              style: const TextStyle(
+                                  color: greenAccent,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold),
                             ),
                             onTap: () {
                               if (portfolio[index] != null &&
