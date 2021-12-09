@@ -32,7 +32,6 @@ class _SearchView extends State<SearchView> {
       borderRadius: BorderRadius.horizontal(left: Radius.circular(5)));
 
   fetchStock(searchString) {
-    print('$baseUrl/api/v1/search?q=$searchString&token=$apiKey');
     http
         .get(Uri.parse('$baseUrl/api/v1/search?q=$searchString&token=$apiKey'))
         .then((res) {
@@ -46,7 +45,6 @@ class _SearchView extends State<SearchView> {
         .where("uid", isEqualTo: auth.currentUser!.uid.toString())
         .get()
         .then((querySnapshot) {
-      print(querySnapshot.docs[0]['watchlist'].toString());
       setState(() => watchlist = querySnapshot.docs[0]['watchlist']);
     });
   }
